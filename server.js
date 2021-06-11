@@ -14,7 +14,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.route("/").get((req, res) => {
-  res.render(path.join(__dirname, "views/pug"));
+  res.render(path.join(__dirname, "views/pug"), {
+    title: "Hello",
+    message: "Please login",
+  });
 });
 
 const PORT = process.env.PORT || 3000;
