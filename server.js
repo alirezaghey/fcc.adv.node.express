@@ -42,10 +42,18 @@ myDB(async (client) => {
   );
   app.route("/").get((req, res) => {
     res.render(path.join(__dirname, "views/pug"), {
+      showLogin: true,
       title: "Connected to Database",
       message: "Please login",
     });
   });
+  app.post(
+    "/login",
+    passport.authenticate("local", { failureRedirect: "/" }),
+    (req, res) => {
+      res.redirect("/profile");
+    }
+  );
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
