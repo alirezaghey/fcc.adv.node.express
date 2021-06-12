@@ -54,6 +54,9 @@ myDB(async (client) => {
       res.redirect("/profile");
     }
   );
+  app.route("/profile").get(ensureAuthenticated, (req, res) => {
+    res.render(path.join(__dirname, "views/pug/profile"));
+  });
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
@@ -68,6 +71,11 @@ myDB(async (client) => {
     res.render("pug", { title: e, message: "Unable to login" });
   });
 });
+
+const ensureAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/");
+};
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
