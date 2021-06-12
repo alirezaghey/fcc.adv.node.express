@@ -55,7 +55,9 @@ myDB(async (client) => {
     }
   );
   app.route("/profile").get(ensureAuthenticated, (req, res) => {
-    res.render(path.join(__dirname, "views/pug/profile"));
+    res.render(path.join(__dirname, "views/pug/profile"), {
+      username: req.user.username,
+    });
   });
   passport.serializeUser((user, done) => {
     done(null, user._id);
