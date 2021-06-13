@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 module.exports = function (app, myDataBase) {
   app.route("/").get((req, res) => {
     res.render(path.join(__dirname, "views/pug"), {
+      showSocialAuth: true,
       showRegistration: true,
       showLogin: true,
       title: "Connected to Database",
@@ -50,6 +51,15 @@ module.exports = function (app, myDataBase) {
       res.redirect("/profile");
     }
   );
+  app.route("/auth/github").get(passport.authenticate("github"));
+  app
+    .route("/auth/github/callback")
+    .get(
+      passport.authenticate("github", { failureRedirect: "/" }),
+      (req, res) => {
+        res.redirect("/profile");
+      }
+    );
   app.use((req, res, next) => {
     res.status(404).type("text").send("Not Found");
   });
