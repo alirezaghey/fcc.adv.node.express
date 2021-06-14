@@ -12,6 +12,9 @@ module.exports = function (app, myDataBase) {
       message: "Please login",
     });
   });
+  app.route("/chat").get(ensureAuthenticated, (req, res, next) => {
+    res.render(path.join(__dirname, "views/pug/chat"), { user: req.user });
+  });
   app.post(
     "/login",
     passport.authenticate("local", { failureRedirect: "/" }),
@@ -57,7 +60,8 @@ module.exports = function (app, myDataBase) {
     .get(
       passport.authenticate("github", { failureRedirect: "/" }),
       (req, res) => {
-        res.redirect("/profile");
+        req.session.user_id = req.user.id;
+        res.redirect("/chat");
       }
     );
   app.use((req, res, next) => {
